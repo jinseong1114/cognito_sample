@@ -40,7 +40,7 @@ resource "aws_iam_role" "saas_lambda_role" {
     }
 }
 
-resource "aws_iam_role_policy_attachment" "saas_lambda_role" {
+resource "aws_iam_role_policy_attachment" "saas_lambda_role_attach" {
   role       = "${aws_iam_role.saas_lambda_role.name}"
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
 }
