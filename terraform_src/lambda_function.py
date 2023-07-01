@@ -9,6 +9,8 @@ def lambda_handler(event, context):
     
     client= boto3.client('cognito-identity')
     
+    aws_account_id = context.invoked_function_arn.split(":")[4]
+    
     parameters = event['queryStringParameters']
 
     role_name = client.get_identity_pool_roles(
@@ -25,7 +27,7 @@ def lambda_handler(event, context):
         },
     )
     
-    client_sts = boto3.client('sts')
+    sts_client = boto3.client('sts')
 
     scoped_policy= {
             "Version": "2012-10-17",
@@ -34,7 +36,7 @@ def lambda_handler(event, context):
                     "Sid": "penguin",
                     "Effect": "Allow",
                     "Action": "dynamodb:Query",
-                    "Resource": "arn:aws:dynamodb:us-east-1:126554542098:table/penguin-db",
+                    "Resource": "arn:aws:dynamodb:us-east-1:{aws_account_id}:table/penguin-db",
                     "Condition": {
         		        "ForAllValues:StringEquals": {
         			        "dynamodb:LeadingKeys": "{key}"
@@ -44,11 +46,11 @@ def lambda_handler(event, context):
                         ]
               }
     
-    policy = json.dumps(scoped_policy).replace("{key}",event["queryStringParameters"]["tenant_id"])
+    policy = json.dumps(scoped_policy).replace("{key}",event["queryStringParameters"]["tenant_id"]).replace("{aws_account_id}",aws_account_id)
     
-    response = client_sts.assume_role_with_web_identity(
+    response = sts_client.assume_role_with_web_identity(
                        RoleArn=role_name,
-                       RoleSessionName='saas-session',
+                       RoleSessionName='ddd',
                        WebIdentityToken=response['Token'],
                        Policy=policy
     )
