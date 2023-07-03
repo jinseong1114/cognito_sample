@@ -50,7 +50,7 @@ def lambda_handler(event, context):
     
     response = sts_client.assume_role_with_web_identity(
                        RoleArn=role_name,
-                       RoleSessionName='ddd',
+                       RoleSessionName='saas_session',
                        WebIdentityToken=response['Token'],
                        Policy=policy
     )

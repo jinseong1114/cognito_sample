@@ -4,7 +4,9 @@
   "proxy": "http://apiserver.com:5000",
   "private": true,
   "dependencies": {
+    "@aws-amplify/auth": "^5.5.3",
     "@aws-amplify/core": "^5.1.8",
+    "@aws-amplify/storage": "^5.6.3",
     "@aws-amplify/ui-react": "^4.5.1",
     "@cloudscape-design/components": "^3.0.240",
     "@cloudscape-design/global-styles": "^1.0.8",
