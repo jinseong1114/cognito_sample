@@ -44,7 +44,7 @@ export default function SideBar(props) {
             color: 'inherit',
             textDecoration: 'none',
           }}>
-            Your Salary
+            Tenant List
           </Typography>
         </Toolbar>
       </AppBar>

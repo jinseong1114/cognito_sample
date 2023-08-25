@@ -32,7 +32,7 @@ const components = {
 
 const services = {
   async handleSignUp(formData) {
-    const company_name = document.getElementsByName("company_name")[0].value;
+    const ec2_option = document.getElementsByName("ec2_option")[0].value;
     let { username, password, attributes } = formData;
 
     return Auth.signUp({
@@ -40,7 +40,7 @@ const services = {
       password,
       attributes: {
         'custom:tenant_id': uuid(),
-        'custom:company_name': company_name,
+        'custom:ec2_option': ec2_option,
         //'given_name':attributes.given_name,
       },
       autoSignIn: {
@@ -75,8 +75,8 @@ export default function App() {
         label: 'Confirm Password',
         order: 3,
       },
-      company_name: {
-        label: 'Company Name',
+      ec2_option: {
+        label: 'EC2 Option',
         order: 8,
       },
     }

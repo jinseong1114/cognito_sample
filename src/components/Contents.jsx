@@ -32,20 +32,22 @@ export default function Contents(props) {
 
   }, [])
 
-  function createData(year, role, tenure, salary) {
-    return { year, role, tenure, salary };
+  function createData(ec2Option, exparedDate, vpcName) {
+    return { ec2Option, exparedDate, vpcName };
   }
 
   async function getUserCredentials() {
     try {
+      console.log('getUserCredentials')
       const session = await Auth.currentSession();
-      const jwtToken = session.getIdToken().getJwtToken();
-      setJwtToken(jwtToken)
+      console.log(session)
+      const getJwtToken = session.getIdToken().getJwtToken();
+      setJwtToken(getJwtToken)
       console.log(jwtToken)
       AWS.config.credentials = await new AWS.CognitoIdentityCredentials({
         IdentityPoolId: identityPoolId,
         Logins: {
-          #CognitoInfo: jwtToken
+          "cognito-idp.ap-northeast-1.amazonaws.com/ap-northeast-1_oOlLpuler": jwtToken
         }
 
       });
@@ -85,17 +87,19 @@ export default function Contents(props) {
             Authorization: jwtToken,
             Identity_id: AWS.config.credentials.webIdentityCredentials.params.IdentityId,
             IdentityPoolId: identityPoolId,
-            IdentityPool_login: #CognitoInfo
+            IdentityPool_login: "cognito-idp.ap-northeast-1.amazonaws.com/ap-northeast-1_oOlLpuler"
           }
         };
 
+        console.log('additionalParams:', additionalParams)
+
         apigClient.invokeApi({}, pathTemplate, method, additionalParams, {})
           .then(response => {
-            var year = response.data.year
-            var role = response.data.role
-            var tenure = response.data.tenure
-            var salary = response.data.salary
-            var temp = [createData(year, role, tenure, salary)]
+            console.log(response)
+            var ec2Option = response.data.ec2_option
+            var exparedDate = response.data.expired_date
+            var vpcName = response.data.vpc_name
+            var temp = [createData(ec2Option, exparedDate, vpcName)]
             setRows(temp);
           })
           .catch(error => {
@@ -109,10 +113,9 @@ export default function Contents(props) {
       <Table sx={{ minWidth: 200, }} aria-label="simple table">
         <TableHead>
           <TableRow>
-            <TableCell align="center">연도 </TableCell>
-            <TableCell align="center">직급</TableCell>
-            <TableCell align="center">연차</TableCell>
-            <TableCell align="center">연봉</TableCell>
+            <TableCell align="center">옵션 </TableCell>
+            <TableCell align="center">만료일</TableCell>
+            <TableCell align="center">VPC</TableCell>
           </TableRow>
         </TableHead>
         {rows !== '' &&
@@ -122,10 +125,9 @@ export default function Contents(props) {
                 key={row.name}
                 sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
               >
-                <TableCell align="center">{row.year}</TableCell>
-                <TableCell align="center">{row.role}</TableCell>
-                <TableCell align="center">{row.tenure}</TableCell>
-                <TableCell align="center">{row.salary}</TableCell>
+                <TableCell align="center">{row.ec2Option}</TableCell>
+                <TableCell align="center">{row.exparedDate}</TableCell>
+                <TableCell align="center">{row.vpcName}</TableCell>
               </TableRow>
             ))}
           </TableBody>

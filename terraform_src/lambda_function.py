@@ -3,7 +3,7 @@ import boto3
 from boto3.dynamodb.conditions import Key
 import os
 
-boto3.setup_default_session(region_name='us-east-1')
+boto3.setup_default_session(region_name='ap-northeast-1')
 
 def lambda_handler(event, context):
     
@@ -36,7 +36,7 @@ def lambda_handler(event, context):
                     "Sid": "penguin",
                     "Effect": "Allow",
                     "Action": "dynamodb:Query",
-                    "Resource": "arn:aws:dynamodb:us-east-1:{aws_account_id}:table/penguin-db",
+                    "Resource": "arn:aws:dynamodb:ap-northeast-1:{aws_account_id}:table/penguin-db",
                     "Condition": {
         		        "ForAllValues:StringEquals": {
         			        "dynamodb:LeadingKeys": "{key}"
@@ -57,7 +57,7 @@ def lambda_handler(event, context):
     
     dynamodb = boto3.resource(
         'dynamodb',
-        region_name="us-east-1",
+        region_name="ap-northeast-1",
         aws_access_key_id=response['Credentials']['AccessKeyId'],
         aws_secret_access_key=response['Credentials']['SecretAccessKey'],
         aws_session_token=response['Credentials']['SessionToken'],
